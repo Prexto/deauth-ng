@@ -33,11 +33,11 @@ def handle_exit(signal_received, frame):
 signal.signal(signal.SIGINT, handle_exit)
 
 def scan_networks():
-    """Scan for nearby networks using airodump-ng in the same terminal."""
-    print("[*] Scanning networks... You should see nearby APs in this terminal.")
+    """Scan for nearby networks using airodump-ng in a new terminal window."""
+    print("[*] Scanning networks... This will open a new terminal to show nearby APs.")
     try:
-        # Running airodump-ng directly in the terminal without opening a new one
-        subprocess.run(["airodump-ng", monitor_interface])
+        # Running airodump-ng in a new terminal window (use gnome-terminal or xfce4-terminal)
+        subprocess.Popen(["gnome-terminal", "--", "bash", "-c", f"airodump-ng {monitor_interface}; exec bash"])
     except FileNotFoundError:
         print("[!] Terminal or airodump-ng not found. Install airodump-ng or change terminal emulator.")
         exit(1)
