@@ -1,5 +1,8 @@
 import subprocess
 import time
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 def execute_command(command):
     """Run a system command and display the output."""
