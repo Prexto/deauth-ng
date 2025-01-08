@@ -37,7 +37,7 @@ def scan_networks():
     print("[*] Scanning networks... This will open a new terminal to show nearby APs.")
     try:
         # Running airodump-ng in a new terminal window (use gnome-terminal or xfce4-terminal)
-        subprocess.Popen(["gnome-terminal", "--", "bash", "-c", f"airodump-ng {monitor_interface}; exec bash"])
+        subprocess.Popen(["xfce4-terminal", "--", "bash", "-c", f"airodump-ng {monitor_interface}; exec bash"])
     except FileNotFoundError:
         print("[!] Terminal or airodump-ng not found. Install airodump-ng or change terminal emulator.")
         exit(1)
