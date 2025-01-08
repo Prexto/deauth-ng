@@ -3,12 +3,12 @@ import os
 import signal
 
 # Variables globales
-base_interface = input("Enter interface name")
+base_interface = input("[?] Enter the base interface name (e.g., wlan0): ")
 monitor_interface = base_interface + "mon"
 
 def enable_monitor_mode():
     """Enable monitor mode on the wireless interface."""
-    print("[*] Enabling monitor mode...")
+    print(f"[*] Enabling monitor mode on {base_interface}...")
     try:
         subprocess.run(["airmon-ng", "start", base_interface], check=True)
     except subprocess.CalledProcessError as e:
@@ -17,7 +17,7 @@ def enable_monitor_mode():
 
 def disable_monitor_mode():
     """Disable monitor mode and restore the interface to managed mode."""
-    print("[*] Disabling monitor mode...")
+    print(f"[*] Disabling monitor mode on {monitor_interface}...")
     try:
         subprocess.run(["airmon-ng", "stop", monitor_interface], check=True)
     except subprocess.CalledProcessError as e:
@@ -43,7 +43,7 @@ def scan_networks():
 
 def set_channel(channel):
     """Set the wireless interface to a specific channel."""
-    print(f"[*] Setting interface to channel {channel}...")
+    print(f"[*] Setting {monitor_interface} to channel {channel}...")
     try:
         subprocess.run(["iwconfig", monitor_interface, "channel", channel], check=True)
         print("[*] Channel set successfully.")
