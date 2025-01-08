@@ -18,9 +18,10 @@ def list_access_points(interface):
     """Open a separate terminal to show nearby access points."""
     print("[*] Scanning for nearby access points...")
     print("[*] A new terminal window will display the networks. Close it when ready.")
-    # Launch airodump-ng in a new terminal
-    subprocess.Popen(["xfce4-terminal", "--", "airodump-ng", interface])
+    # Launch airodump-ng in a new terminal for XFCE
+    subprocess.Popen(["xfce4-terminal", "--hold", "-e", f"airodump-ng {interface}"])
     input("[*] Press Enter when you're ready to continue...")
+
 
 def deauth_attack(interface, bssid, channel, num_packets, clients=None):
     """Perform deauth attack on the target BSSID."""
