@@ -3,8 +3,8 @@ import os
 import signal
 
 # Variables globales
-monitor_interface = "wlan0mon"
-base_interface = "wlan0"
+base_interface = input("Enter interface name")
+monitor_interface = base_interface + "mon"
 
 def enable_monitor_mode():
     """Enable monitor mode on the wireless interface."""
