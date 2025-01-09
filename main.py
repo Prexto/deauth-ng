@@ -2,7 +2,7 @@ import subprocess
 import os
 import signal
 
-# Variables globales
+# Global Var
 base_interface = input("[?] Enter the base interface name (e.g., wlan0): ")
 monitor_interface = base_interface + "mon"
 
